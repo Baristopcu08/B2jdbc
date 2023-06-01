@@ -39,6 +39,7 @@ public class _01Connection {
         Statement stmt = conn.createStatement();
 
         // 3- Data transfer icin Resultset gerekli
+        // index 1'den baslar
         ResultSet rs = stmt.executeQuery("SELECT * FROM table1");
         while (rs.next()){
             int id = rs.getInt(1);
