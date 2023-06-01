@@ -2,9 +2,11 @@ package jdbc;
 
 import base.BaseConnection;
 import org.testng.annotations.Test;
+import utils.Utils;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.List;
 
 public class _03JdbcMetaData extends BaseConnection {
 
@@ -46,7 +48,6 @@ public class _03JdbcMetaData extends BaseConnection {
             );
         }
 
-
     }
 
 
@@ -70,5 +71,57 @@ public class _03JdbcMetaData extends BaseConnection {
 
     }
 
+
+    @Test
+    public void test3() throws SQLException {
+        // table1 tablosunu SELECT * FROM table1 ile alin.
+        // tablo basligini ilk satira yazdirin
+        // altina datali yazdirin
+
+        String sql = "SELECT * FROM table1;";
+        rs = stmt.executeQuery(sql);
+
+        // sql ile gelen tablonun meta datasini aliyoruz
+        ResultSetMetaData rsmd = rs.getMetaData();
+
+        // xolon (field) yasisi alindi
+        int cols = rsmd.getColumnCount();
+
+        // field'larin display sizelarini kaydetmek icin bir array oluturuldu.
+        int[] colSize = new int[cols];
+
+        // field'larin display size'lari array'e kaydedildi
+        for (int i = 0; i < cols; i++) {
+            colSize[i] = rsmd.getColumnDisplaySize(i+1)/2;
+        }
+
+        // basliklar yazdiriliyor
+        // System.out.printf("%-20s\t", "string"); -> string text'i icin 20 karakterlik yer ayrilacak ve sol yasli yazilacak sonra tab atilacak
+        for (int i = 0; i < cols; i++) {
+            System.out.printf("%-" + colSize[i] + "s", rsmd.getColumnName(i+1));
+        }
+        System.out.println();
+
+        // while ile tüm datalari geziyoruz
+        while (rs.next()) {
+            // fieldlari satir icinde yaziyoruz.
+            for (int i = 0; i < cols; i++) {
+                System.out.printf("%-" + colSize[i] + "s", rs.getString(i + 1));
+            }
+            System.out.println();
+        }
+
+    }
+
+    @Test
+    public void test4(){
+        String sql = "SELECT id, first_name, last_name, age FROM personel";
+        List<List<String>> data = Utils.getTable(stmt, sql);
+
+        for (List<String> row : data) {
+            System.out.println(row);
+        }
+
+    }
 
 }
