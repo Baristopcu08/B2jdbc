@@ -79,7 +79,10 @@ public class _04JdbcCreate extends BaseConnection {
                 " mytable(first_name, last_name, age)" +
                 " VALUES(?, ?, ?)";
         PreparedStatement stmt1 = conn.prepareStatement(sql);
-
+        stmt1.setString(1, "Can");
+        stmt1.setString(2, "Can");
+        stmt1.setInt(3, 34);
+        stmt1.executeUpdate();
 
 
 
